@@ -3,14 +3,9 @@ require 'date'
 @students = []
 
 ##
-# Puts's the passed in string, centered to a width of 160
-
-def log(str)
-  puts str.center(160)
-end
+# Controls the interactive menu
 
 def interactive_menu
-  students = []
   loop do
     print_menu
     process(gets.chomp)
@@ -32,7 +27,7 @@ end
 def process(selection)
   case selection
   when "1"
-    students = input_students
+    input_students
   when "2"
     show_students
   when "9"
@@ -59,9 +54,7 @@ end
 # Validates input and re-prompts if input is not acceptable.
 
 def input_students
-  log "Please enter the information of the students"
-  log "To finish, just hit return when prompted for a student name"
-  log "---"
+  print_input_header
   name = input_name
   while !name.empty? do
     height = input_height(name)
@@ -71,6 +64,15 @@ def input_students
                                            "student" : "students"}"
     name = input_name
   end
+end
+
+##
+# Prints introduction to the student input process
+
+def print_input_header
+  log "Please enter the information of the students"
+  log "To finish, just hit return when prompted for a student name"
+  log "---"
 end
 
 ##
@@ -144,6 +146,13 @@ def print_footer
   end
   log "Overall, we have #{@students.count} great #{@students.count == 1 ?
                                                     "student" : "students"}"
+end
+
+##
+# Puts's the passed in string, centered to a width of 160
+
+def log(str)
+  puts str.center(160)
 end
 
 interactive_menu
