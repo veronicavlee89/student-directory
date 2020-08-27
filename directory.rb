@@ -66,6 +66,7 @@ end
 # Information includes student name, height and cohort.
 
 def print(students)
+  return if students.count == 0
   students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
   students.each_with_index { |student, i|
     if student[:name][0].upcase == "V" && student[:name].length < 12
@@ -80,6 +81,10 @@ end
 # students.
 
 def print_footer(students)
+  if students.count == 0
+    log "There are no students"
+    return
+  end
   log "Overall, we have #{students.count} great #{students.count == 1 ?
                                                     "student" : "students"}"
 end
