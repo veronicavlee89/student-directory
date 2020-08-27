@@ -27,7 +27,7 @@ def input_students
       cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
     end
     # add the student hash to the array
-    students << {name: name, height: height, cohort: :november}
+    students << {name: name, height: height, cohort: cohort.downcase.to_sym}
     puts "Now we have #{students.count} students".center(@width)
     # get another name from the user
     puts "Enter next student's name".center(@width)
@@ -46,7 +46,7 @@ def print(students)
   i = 0
   until i == students.length do
     if students[i][:name][0].upcase == "V" && students[i][:name].length < 12
-      puts "#{i+1}. #{students[i][:name]}, #{students[i][:height]}cm (#{students[i][:cohort]} cohort)".center(@width)
+      puts "#{i+1}. #{students[i][:name]}, #{students[i][:height]}cm (#{students[i][:cohort].capitalize} cohort)".center(@width)
     end
     i += 1
   end
