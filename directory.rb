@@ -43,6 +43,7 @@ def print_header
 end
 
 def print(students)
+  students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
   i = 0
   until i == students.length do
     if students[i][:name][0].upcase == "V" && students[i][:name].length < 12
