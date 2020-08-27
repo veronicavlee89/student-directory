@@ -28,7 +28,7 @@ def input_students
     end
     # add the student hash to the array
     students << {name: name, height: height, cohort: cohort.downcase.to_sym}
-    students.count == 1 ? (puts "Now we have 1 student".center(@width)) : (puts "Now we have #{students.count} students".center(@width))
+    puts "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}".center(@width)
     # get another name from the user
     puts "Enter next student's name".center(@width)
     name = gets.chomp
@@ -54,7 +54,7 @@ def print(students)
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students".center(@width)
+  puts "Overall, we have #{students.count} great #{students.count == 1 ? "student" : "students"}".center(@width)
 end
 
 students = input_students
