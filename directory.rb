@@ -40,9 +40,9 @@ end
 # Validates input and re-prompts if input is not acceptable.
 
 def input_students
-  log "Please enter the information of the students"\
-      "To finish, just hit return when prompted for a student name"\
-      ""
+  log "Please enter the information of the students"
+  log "To finish, just hit return when prompted for a student name"
+  log "---"
   students = []
   name = input_name
   while !name.empty? do
