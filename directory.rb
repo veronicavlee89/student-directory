@@ -23,10 +23,12 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, i|
-    if student[:name][0].upcase == "V" && student[:name].length < 12
-      puts "#{i+1}. #{student[:name]} (#{student[:cohort]} cohort)"
+  i = 0
+  until i == students.length do
+    if students[i][:name][0].upcase == "V" && students[i][:name].length < 12
+      puts "#{i+1}. #{students[i][:name]} (#{students[i][:cohort]} cohort)"
     end
+    i += 1
   end
 end
 
