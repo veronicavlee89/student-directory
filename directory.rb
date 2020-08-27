@@ -24,21 +24,21 @@ def input_students
   students = []
   # get the first name
   log "Enter student's name"
-  name = gets.chomp
+  name = gets.gsub("\n",'')
   # while the name is not empty, repeat this code
   while !name.empty? do
     # get height that is numeric digits only and is > 0
     height = '0'
     until /\A\d+\z/.match(height) && height.to_i > 0
       log "Enter #{name}'s height (in cm)"
-      height = gets.chomp
+      height = gets.gsub("\n",'')
     end
     cohort = ""
     # validate that cohort entered is a month
     until Date::MONTHNAMES.include? cohort.capitalize
       log "Enter #{name}'s cohort. Hit return to set to "\
           "#{Date::MONTHNAMES[Date.today.month]}"
-      cohort = gets.chomp
+      cohort = gets.gsub("\n",'')
       # default cohort to current month if none provided
       cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
     end
@@ -46,7 +46,7 @@ def input_students
     log "Now we have #{students.count} #{students.count == 1 ?
                                            "student" : "students"}"
     log "Enter next student's name"
-    name = gets.chomp
+    name = gets.gsub("\n",'')
   end
   students
 end
