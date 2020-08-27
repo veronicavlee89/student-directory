@@ -49,13 +49,11 @@ end
 
 def print(students)
   students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
-  i = 0
-  until i == students.length do
-    if students[i][:name][0].upcase == "V" && students[i][:name].length < 12
-      log "#{i+1}. #{students[i][:name]}, #{students[i][:height]}cm (#{students[i][:cohort].capitalize} cohort)"
+  students.each_with_index { |student, i|
+    if student[:name][0].upcase == "V" && student[:name].length < 12
+      log "#{i+1}. #{student[:name]}, #{student[:height]}cm (#{student[:cohort].capitalize} cohort)"
     end
-    i += 1
-  end
+  }
 end
 
 def print_footer(students)
