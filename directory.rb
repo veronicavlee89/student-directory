@@ -1,36 +1,41 @@
 require 'date'
 
-@width = 160
+@width = 50
+
+def log(str)
+  # separate center and width to method to easily change in the future
+  puts str.center(160)
+end
 
 def input_students
-  puts "Please enter the information of the students".center(@width)
-  puts "To finish, just hit return when prompted for a student name".center(@width)
-  puts ""
+  log "Please enter the information of the students"
+  log "To finish, just hit return when prompted for a student name"
+  log ""
   # create an empty array
   students = []
   # get the first name
-  puts "Enter student's name".center(@width)
+  log "Enter student's name"
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
     # get height that is numeric digits only and is > 0
     height = '0'
     until /\A\d+\z/.match(height) && height.to_i > 0
-      puts "Enter #{name}'s height (in cm)".center(@width)
+      log "Enter #{name}'s height (in cm)"
       height = gets.chomp
     end
     # get cohort. Default to current month if none entered
     cohort = ""
     until Date::MONTHNAMES.include? cohort.capitalize
-      puts "Enter #{name}'s cohort. Hit return to set to #{Date::MONTHNAMES[Date.today.month]}".center(@width)
+      log "Enter #{name}'s cohort. Hit return to set to #{Date::MONTHNAMES[Date.today.month]}"
       cohort = gets.chomp
       cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
     end
     # add the student hash to the array
     students << {name: name, height: height, cohort: cohort.downcase.to_sym}
-    puts "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}".center(@width)
+    log "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}"
     # get another name from the user
-    puts "Enter next student's name".center(@width)
+    log "Enter next student's name"
     name = gets.chomp
   end
   # return the array of students
@@ -38,8 +43,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy".center(@width)
-  puts "-------------".center(@width)
+  log "The students of Villains Academy"
+  log "-------------"
 end
 
 def print(students)
@@ -47,14 +52,14 @@ def print(students)
   i = 0
   until i == students.length do
     if students[i][:name][0].upcase == "V" && students[i][:name].length < 12
-      puts "#{i+1}. #{students[i][:name]}, #{students[i][:height]}cm (#{students[i][:cohort].capitalize} cohort)".center(@width)
+      log "#{i+1}. #{students[i][:name]}, #{students[i][:height]}cm (#{students[i][:cohort].capitalize} cohort)"
     end
     i += 1
   end
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great #{students.count == 1 ? "student" : "students"}".center(@width)
+  log "Overall, we have #{students.count} great #{students.count == 1 ? "student" : "students"}"
 end
 
 students = input_students
