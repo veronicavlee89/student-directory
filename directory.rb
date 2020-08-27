@@ -21,9 +21,7 @@ def interactive_menu
     when "1"
       students = input_students
     when "2"
-      print_header
-      print_students
-      print_footer
+      show_students
     when "9"
       exit # terminate program
     else
