@@ -2,10 +2,19 @@ require 'date'
 
 @width = 50
 
+##
+# Puts's the passed in string, centered to a width of 160
+
 def log(str)
-  # separate center and width to method to easily change in the future
   puts str.center(160)
 end
+
+##
+# Collects student information from user input.
+#
+# Prompts user to enter required student information, including name, height
+# and cohort.
+# Validates input and re-prompts if input is not acceptable.
 
 def input_students
   log "Please enter the information of the students"
@@ -24,40 +33,55 @@ def input_students
       log "Enter #{name}'s height (in cm)"
       height = gets.chomp
     end
-    # get cohort. Default to current month if none entered
     cohort = ""
+    # validate that cohort entered is a month
     until Date::MONTHNAMES.include? cohort.capitalize
-      log "Enter #{name}'s cohort. Hit return to set to #{Date::MONTHNAMES[Date.today.month]}"
+      log "Enter #{name}'s cohort. Hit return to set to "\
+          "#{Date::MONTHNAMES[Date.today.month]}"
       cohort = gets.chomp
+      # default cohort to current month if none provided
       cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
     end
-    # add the student hash to the array
     students << {name: name, height: height, cohort: cohort.downcase.to_sym}
-    log "Now we have #{students.count} #{students.count == 1 ? "student" : "students"}"
-    # get another name from the user
+    log "Now we have #{students.count} #{students.count == 1 ?
+                                           "student" : "students"}"
     log "Enter next student's name"
     name = gets.chomp
   end
-  # return the array of students
   students
 end
+
+##
+# Prints a header for the Villains Academy student list
 
 def print_header
   log "The students of Villains Academy"
   log "-------------"
 end
 
+##
+# Prints a list of students of Villains Academy whose name starts with 'V' and
+# is less than 12 characters long.
+# Students are printed ordered by their cohort.
+# Information includes student name, height and cohort.
+
 def print(students)
   students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
   students.each_with_index { |student, i|
     if student[:name][0].upcase == "V" && student[:name].length < 12
-      log "#{i+1}. #{student[:name]}, #{student[:height]}cm (#{student[:cohort].capitalize} cohort)"
+      log "#{i+1}. #{student[:name]}, #{student[:height]}cm "\
+          "(#{student[:cohort].capitalize} cohort)"
     end
   }
 end
 
+##
+# Prints a footer for the Villains Academy student list, including a count of
+# students.
+
 def print_footer(students)
-  log "Overall, we have #{students.count} great #{students.count == 1 ? "student" : "students"}"
+  log "Overall, we have #{students.count} great #{students.count == 1 ?
+                                                    "student" : "students"}"
 end
 
 students = input_students
