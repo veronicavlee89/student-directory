@@ -42,16 +42,12 @@ end
 
 def show_students
   print_header
-  print_students
+  print_students_list
   print_footer
 end
 
 ##
-# Collects student information from user input.
-#
-# Prompts user to enter required student information, including name, height
-# and cohort.
-# Validates input and re-prompts if input is not acceptable.
+# Collects student information from user including name, height and cohort.
 
 def input_students
   print_input_header
@@ -101,11 +97,11 @@ end
 
 def input_cohort(student_name)
   cohort = ""
+  default_cohort = Date::MONTHNAMES[Date.today.month]
   until Date::MONTHNAMES.include? cohort.capitalize
-    log "Enter #{student_name}'s cohort. Hit return to set to "\
-          "#{Date::MONTHNAMES[Date.today.month]}"
+    log "Enter #{student_name}'s cohort. Hit return to set to #{default_cohort}"
     cohort = gets.gsub("\n",'')
-    cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
+    cohort = default_cohort if cohort == ""
   end
   cohort
 end
@@ -119,19 +115,19 @@ def print_header
 end
 
 ##
-# Prints a list of students of Villains Academy whose name starts with 'V' and
-# is less than 12 characters long.
+# Prints a list of students of Villains Academy.
 # Students are printed ordered by their cohort.
 # Information includes student name, height and cohort.
 
-def print_students
+def print_students_list
   return if @students.count == 0
   @students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
   @students.each_with_index { |student, i|
-    if student[:name][0].upcase == "V" && student[:name].length < 12
-      log "#{i+1}. #{student[:name]}, #{student[:height]}cm "\
-          "(#{student[:cohort].capitalize} cohort)"
-    end
+    # the below constraint was part of Step 8 Exercises, but since removed
+    # if student[:name][0].upcase == "V" && student[:name].length < 12
+    log "#{i+1}. #{student[:name]}, #{student[:height]}cm "\
+        "(#{student[:cohort].capitalize} cohort)"
+    # end
   }
 end
 
