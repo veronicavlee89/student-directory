@@ -1,3 +1,5 @@
+require 'date'
+
 @width = 160
 
 def input_students
@@ -11,11 +13,18 @@ def input_students
   name = gets.chomp
   # while the name is not empty, repeat this code
   while !name.empty? do
-    height = '0'
     # get height that is numeric digits only and is > 0
+    height = '0'
     until /\A\d+\z/.match(height) && height.to_i > 0
       puts "Enter #{name}'s height (in cm)".center(@width)
       height = gets.chomp
+    end
+    # get cohort. Default to current month if none entered
+    cohort = ""
+    until Date::MONTHNAMES.include? cohort.capitalize
+      puts "Enter #{name}'s cohort. Hit return to set to #{Date::MONTHNAMES[Date.today.month]}".center(@width)
+      cohort = gets.chomp
+      cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
     end
     # add the student hash to the array
     students << {name: name, height: height, cohort: :november}
