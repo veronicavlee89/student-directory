@@ -40,38 +40,55 @@ end
 # Validates input and re-prompts if input is not acceptable.
 
 def input_students
-  log "Please enter the information of the students"
-  log "To finish, just hit return when prompted for a student name"
-  log ""
-  # create an empty array
+  log "Please enter the information of the students"\
+      "To finish, just hit return when prompted for a student name"\
+      ""
   students = []
-  # get the first name
-  log "Enter student's name"
-  name = gets.gsub("\n",'')
-  # while the name is not empty, repeat this code
+  name = input_name
   while !name.empty? do
-    # get height that is numeric digits only and is > 0
-    height = '0'
-    until /\A\d+\z/.match(height) && height.to_i > 0
-      log "Enter #{name}'s height (in cm)"
-      height = gets.gsub("\n",'')
-    end
-    cohort = ""
-    # validate that cohort entered is a month
-    until Date::MONTHNAMES.include? cohort.capitalize
-      log "Enter #{name}'s cohort. Hit return to set to "\
-          "#{Date::MONTHNAMES[Date.today.month]}"
-      cohort = gets.gsub("\n",'')
-      # default cohort to current month if none provided
-      cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
-    end
+    height = input_height(name)
+    cohort = input_cohort(name)
     students << {name: name, height: height, cohort: cohort.downcase.to_sym}
     log "Now we have #{students.count} #{students.count == 1 ?
                                            "student" : "students"}"
-    log "Enter next student's name"
-    name = gets.gsub("\n",'')
+    name = input_name
   end
   students
+end
+
+##
+# Gets student name as input. Can be an empty string.
+
+def input_name
+  log "Enter student's name"
+  gets.gsub("\n",'')
+end
+
+##
+# Gets student height as input. Must be numeric digits only and > 0
+
+def input_height(student_name)
+  height = '0'
+  until /\A\d+\z/.match(height) && height.to_i > 0
+    log "Enter #{student_name}'s height (in cm)"
+    height = gets.gsub("\n",'')
+  end
+  height
+end
+
+##
+# Gets student cohort as input. Must be a month.
+# Defaults cohort to current month if none provided.
+
+def input_cohort(student_name)
+  cohort = ""
+  until Date::MONTHNAMES.include? cohort.capitalize
+    log "Enter #{student_name}'s cohort. Hit return to set to "\
+          "#{Date::MONTHNAMES[Date.today.month]}"
+    cohort = gets.gsub("\n",'')
+    cohort = Date::MONTHNAMES[Date.today.month] if cohort == ""
+  end
+  cohort
 end
 
 ##
