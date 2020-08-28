@@ -1,15 +1,15 @@
 require 'date'
 
 @students = []
+@default_file = "students.csv"
 
 ##
 # Loads students from file on program start up, if applicable.
 
 def try_load_students
-  filename = (ARGV.first.nil? ? "students.csv" : ARGV.first)
+  filename = (ARGV.first.nil? ? @default_file : ARGV.first)
   if File.exists?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}"
   else
     puts "Sorry, #{filename} doesn't exist."
     exit
@@ -32,8 +32,8 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "3. Save student list to file"
+  puts "4. Load student list from file"
   puts "9. Exit"
 end
 
@@ -47,13 +47,15 @@ def process(selection)
   when "2"
     show_students
   when "3"
-    save_students
-    puts "Students saved"
+    puts "-- Save student list to file --"
+    filename = input_filename
+    save_students(filename) if filename.nil? == false
   when "4"
-    load_students
-    puts "Students loaded"
+    puts "-- Load student list from file --"
+    filename = input_filename
+    load_students(filename) if filename.nil? == false
   when "9"
-    puts "Exiting program.."
+    puts "Exiting program.. bye!"
     exit
   else
     puts "I don't know what you meant, try again"
@@ -62,12 +64,29 @@ def process(selection)
 end
 
 ##
+# Gets a filename input from the user. Validates file exists.
+# Defaults if no file entered.
+
+def input_filename
+  puts "Enter filename. Hit return to use #{@default_file}"
+  filename = STDIN.gets.chomp
+  if filename.empty?
+    @default_file
+  elsif File.exists?(filename)
+    filename
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    nil
+  end
+end
+
+##
 # Collects student information from user including name, height and cohort.
 
 def input_students
   print_input_header
   name = input_name
-  while !name.empty? do
+  while name.empty? == false do
     add_student(name, input_height(name), input_cohort(name))
     log "Now we have #{@students.count} #{@students.count == 1 ?
                                            "student" : "students"}"
@@ -87,8 +106,8 @@ end
 ##
 # Saves student list to a file
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename = @default_file)
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = [student[:name], student[:height], student[:cohort]]
     csv_line = student_data.join(",")
@@ -100,13 +119,14 @@ end
 ##
 # Loads student list from a file
 
-def load_students(filename = "students.csv")
+def load_students(filename = @default_file)
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, height, cohort = line.chomp.split(',')
     add_student(name, height, cohort)
   end
   file.close
+  puts "Loaded #{@students.count} students from #{filename}"
 end
 
 ##
@@ -169,8 +189,7 @@ def print_header
 end
 
 ##
-# Prints a list of students of Villains Academy.
-# Students are printed ordered by their cohort.
+# Prints a list of students of Villains Academy, ordered by cohort month.
 # Information includes student name, height and cohort.
 
 def print_students_list
@@ -183,8 +202,7 @@ def print_students_list
 end
 
 ##
-# Prints a footer for the Villains Academy student list, including a count of
-# students.
+# Prints a footer for the Villains Academy student list
 
 def print_footer
   if @students.count == 0
