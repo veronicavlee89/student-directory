@@ -48,13 +48,17 @@ def process(selection)
     show_students
   when "3"
     save_students
+    puts "Students saved"
   when "4"
     load_students
+    puts "Students loaded"
   when "9"
+    puts "Exiting program.."
     exit
   else
     puts "I don't know what you meant, try again"
   end
+  puts "----------"
 end
 
 ##
@@ -126,7 +130,7 @@ end
 
 def input_name
   log "Enter student's name"
-  STDIN.gets.gsub("\n",'')
+  STDIN.gets.chomp
 end
 
 ##
@@ -136,7 +140,7 @@ def input_height(student_name)
   height = '0'
   until /\A\d+\z/.match(height) && height.to_i > 0
     log "Enter #{student_name}'s height (in cm)"
-    height = STDIN.gets.gsub("\n",'')
+    height = STDIN.gets.chomp
   end
   height
 end
@@ -150,7 +154,7 @@ def input_cohort(student_name)
   default_cohort = Date::MONTHNAMES[Date.today.month]
   until Date::MONTHNAMES.include? cohort.capitalize
     log "Enter #{student_name}'s cohort. Hit return to set to #{default_cohort}"
-    cohort = STDIN.gets.gsub("\n",'')
+    cohort = STDIN.gets.chomp
     cohort = default_cohort if cohort == ""
   end
   cohort
@@ -173,11 +177,8 @@ def print_students_list
   return if @students.count == 0
   @students.sort_by! { |student| Date::MONTHNAMES.index(student[:cohort].to_s.capitalize) }
   @students.each_with_index { |student, i|
-    # the below constraint was part of Step 8 Exercises, but since removed
-    # if student[:name][0].upcase == "V" && student[:name].length < 12
     log "#{i+1}. #{student[:name]}, #{student[:height]}cm "\
         "(#{student[:cohort].capitalize} cohort)"
-    # end
   }
 end
 
