@@ -6,8 +6,7 @@ require 'date'
 # Loads students from file on program start up, if applicable.
 
 def try_load_students
-  filename = ARGV.first
-  return if filename.nil?
+  filename = (ARGV.first.nil? ? "students.csv" : ARGV.first)
   if File.exists?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
@@ -71,9 +70,6 @@ def input_students
     name = input_name
   end
 end
-
-##
-# Saves the inputted student information to a file
 
 ##
 # Prints the student information
