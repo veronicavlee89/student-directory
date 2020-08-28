@@ -107,25 +107,24 @@ end
 # Saves student list to a file
 
 def save_students(filename = @default_file)
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = [student[:name], student[:height], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
+  file = File.open(filename, "w") { |f|
+    @students.each do |student|
+      student_data = [student[:name], student[:height], student[:cohort]]
+      f.puts student_data.join(",")
+    end
+  }
 end
 
 ##
-# Loads student list from a file
+# Loads students from a file, appending to the existing student list.
 
 def load_students(filename = @default_file)
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, height, cohort = line.chomp.split(',')
-    add_student(name, height, cohort)
-  end
-  file.close
+  file = File.open(filename, "r") { |f|
+    f.each_line do |line|
+      name, height, cohort = line.chomp.split(',')
+      add_student(name, height, cohort)
+    end
+  }
   puts "Loaded #{@students.count} students from #{filename}"
 end
 
