@@ -65,9 +65,7 @@ def input_students
   print_input_header
   name = input_name
   while !name.empty? do
-    height = input_height(name)
-    cohort = input_cohort(name)
-    @students << {name: name, height: height, cohort: cohort.downcase.to_sym}
+    add_student(name, input_height(name), input_cohort(name))
     log "Now we have #{@students.count} #{@students.count == 1 ?
                                            "student" : "students"}"
     name = input_name
@@ -86,6 +84,9 @@ def show_students
   print_footer
 end
 
+##
+# Saves student list to a file
+
 def save_students
   file = File.open("students.csv", "w")
   @students.each do |student|
@@ -96,13 +97,23 @@ def save_students
   file.close
 end
 
+##
+# Loads student list from a file
+
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, height, cohort = line.chomp.split(',')
-    @students << { name: name, height: height, cohort: cohort.to_sym }
+    add_student(name, height, cohort)
   end
   file.close
+end
+
+##
+# Adds a student to the students list
+
+def add_student(name, height, cohort)
+  @students << {name: name, height: height, cohort: cohort.downcase.to_sym}
 end
 
 ##
