@@ -3,12 +3,27 @@ require 'date'
 @students = []
 
 ##
+# Loads students from file on program start up, if applicable.
+
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+##
 # Controls the interactive menu
 
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -81,8 +96,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     @students << { name: name, cohort: cohort.to_sym }
@@ -104,7 +119,7 @@ end
 
 def input_name
   log "Enter student's name"
-  gets.gsub("\n",'')
+  STDIN.gets.gsub("\n",'')
 end
 
 ##
@@ -114,7 +129,7 @@ def input_height(student_name)
   height = '0'
   until /\A\d+\z/.match(height) && height.to_i > 0
     log "Enter #{student_name}'s height (in cm)"
-    height = gets.gsub("\n",'')
+    height = STDIN.gets.gsub("\n",'')
   end
   height
 end
@@ -128,7 +143,7 @@ def input_cohort(student_name)
   default_cohort = Date::MONTHNAMES[Date.today.month]
   until Date::MONTHNAMES.include? cohort.capitalize
     log "Enter #{student_name}'s cohort. Hit return to set to #{default_cohort}"
-    cohort = gets.gsub("\n",'')
+    cohort = STDIN.gets.gsub("\n",'')
     cohort = default_cohort if cohort == ""
   end
   cohort
@@ -179,4 +194,5 @@ def log(str)
   puts str.center(160)
 end
 
+try_load_students
 interactive_menu
